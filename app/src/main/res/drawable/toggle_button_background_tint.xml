@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Checked state -->
+    <item android:state_checked="true" android:color="#8A77D9"/> <!-- Light purple -->
+    <!-- Default state -->
+    <item android:color="#FFFFFF"/> <!-- White -->
+</selector>

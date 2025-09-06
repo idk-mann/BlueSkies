@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="110dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="@drawable/card_background">
+
+    <TextView
+        android:id="@+id/dayLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mon"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnSurface"
+        android:layout_marginBottom="8dp" />
+
+    <ImageView
+        android:id="@+id/dayIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/clear_day"
+        android:contentDescription="Weather Icon"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tempText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="--°C"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnSurfaceSecondary"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/probabilityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="45%"
+        android:textSize="14sp"
+        android:layout_marginTop="6dp"
+        android:textColor="?attr/colorOnSurface" />
+</LinearLayout>

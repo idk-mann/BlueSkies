@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom overlay, inherits from Material3’s Light Dynamic Colors -->
+    <style name="AppTheme.Overlay" parent="Base.Theme.MyApplication2">
+        <item name="colorPrimary">@color/overlay_light_primary</item>
+        <item name="colorOnPrimary">@color/overlay_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/overlay_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/overlay_light_onPrimaryContainer</item>
+    </style>
+</resources>

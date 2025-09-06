@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application dark theme -->
+    <style name="Base.Theme.MyApplication2" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Dark theme color overrides -->
+        <item name="colorSurface">@color/colorSurfaceDark</item>
+        <item name="colorSurfaceInverse">@color/colorSurfaceInverseDark</item>
+        <item name="colorOnSurface">@color/colorOnSurfaceDark</item>
+        <item name="colorOnSurfaceSecondary">@color/colorOnSurfaceSecondaryDark</item>
+
+        <item name="android:statusBarColor">@color/black</item>
+
+
+
+
+        <!-- Add other dark theme colors here as needed -->
+    </style>
+
+    <style name="ThemeOverlay.MyApplication2.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_900</item> <!-- Darker blue -->
+        <item name="fullscreenTextColor">@color/light_blue_A400</item> <!-- Brighter accent -->
+    </style>
+
+    <style name="ThemeOverlay.MyApplication2.Menu" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Override popup menu colors -->
+        <item name="colorSurface">@color/colorSurfaceDark</item>
+        <item name="colorOnSurface">@color/colorOnSurfaceDark</item>
+        <item name="android:textColorPrimary">@color/colorOnSurfaceDark</item>
+        <!-- add other menu-specific colors here -->
+    </style>
+</resources>

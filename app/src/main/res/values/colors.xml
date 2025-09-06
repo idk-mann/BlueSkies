@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <!-- res/values/colors.xml -->
+    <color name="lilac">#4CAF50</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
+
+    <color name="hotpink">#FF69B4</color>
+
+    <color name="colorSurfaceDark">#FF201F25</color>
+    <color name="colorOnSurfaceDark">#FFFFFFFF</color> <!-- full white text -->
+    <color name="colorOnSurfaceSecondaryDark">#DEFFFFFF</color> <!-- 87% white -->
+    <color name="colorSurfaceInverseDark">#FFFFFFFF</color>
+
+
+
+
+    <color name="colorSurface">#FFFFFFFF</color> <!-- white background -->
+    <color name="colorOnSurface">#FF000000</color> <!-- full black text -->
+    <color name="colorOnSurfaceSecondary">#CC000000</color> <!-- 80% black -->
+    <color name="colorSurfaceInverse">#FF201F25</color>       <!-- Inverse of white -->
+
+
+
+    <color name="overlay_light_primary">#9C4146</color>
+    <color name="overlay_light_onPrimary">#FFFFFF</color>
+    <color name="overlay_light_primaryContainer">#001BFF</color>
+    <color name="overlay_light_onPrimaryContainer">#400008</color>
+
+</resources>
