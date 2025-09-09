@@ -400,7 +400,7 @@
                         android:id="@+id/tvRecurringNotificationLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rain Warning"
+                        android:text="Personalized Notification"
                         android:textSize="18sp"
                         android:textColor="?android:textColorPrimary" />
 
@@ -408,7 +408,7 @@
                         android:id="@+id/tvRecurringNotificationSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Alert if rain is forecasted in next 6 hours"
+                        android:text="Customize your own personal weather notification"
                         android:textSize="10sp"
                         android:textColor="?android:textColorSecondary" />
                 </LinearLayout>

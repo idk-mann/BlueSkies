@@ -237,8 +237,6 @@ class MainActivity : AppCompatActivity() {
         sunriseSunsetManager = SunriseSunsetManager(this)
 
 
-
-
         val isFirstLaunch = prefs.getBoolean("is_first_launch", true)
         if (isFirstLaunch) {
             prefs.edit().putBoolean("is_first_launch", false).apply()
@@ -269,7 +267,6 @@ class MainActivity : AppCompatActivity() {
             showLoading(false)
         }
 
-//        binding.toolbar.context.setTheme(R.style.ThemeOverlay_MyApp_Toolbar_Dark)
 
     }
 
@@ -299,33 +296,6 @@ class MainActivity : AppCompatActivity() {
 
                 lastGradient = newGradient
                 saveLastGradientToPrefs(newGradient)
-
-//                // Control status bar icon colors (dark icons on light theme, etc.)
-//                val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                    windowInsetsController.isAppearanceLightStatusBars = lightTheme
-//                }
-//
-//                @Suppress("DEPRECATION")
-//                window.statusBarColor = ContextCompat.getColor(
-//                    this,
-//                    if (lightTheme) R.color.status_bar_dark else R.color.status_bar_light
-//                )
-//
-//                WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = lightTheme
-//
-//
-//                // Toolbar colors (your own logic)
-//                val toolbarColor = if (lightTheme) {
-//                    ContextCompat.getColor(this, R.color.toolbar_light)
-//                } else {
-//                    ContextCompat.getColor(this, R.color.toolbar_dark)
-//                }
-//                binding.toolbar.setBackgroundColor(toolbarColor)
-//
-//                val toolbarTitleColor = if (lightTheme) Color.BLACK else Color.WHITE
-//                binding.toolbar.setTitleTextColor(toolbarTitleColor)
-//                binding.toolbar.navigationIcon?.setTint(toolbarTitleColor)
 
             }
         }
@@ -489,100 +459,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
-//    fun animateBackgroundTransition(view: View, newGradient: GradientDrawable, duration: Int = 1000) {
-//        Log.d("BackgroundTransition", "animateBackgroundTransition called with duration: $duration")
-//
-//        val fromDrawable = lastGradient ?: getDefaultGradient()
-//
-//
-//
-//        Log.d("BackgroundTransition", "From drawable: ${fromDrawable.javaClass.simpleName}")
-//        Log.d("BackgroundTransition", "To drawable: ${arrayOf(fromDrawable, newGradient).joinToString { it.javaClass.simpleName }}")
-//
-//
-//
-//        val transition = TransitionDrawable(arrayOf(fromDrawable, newGradient)).apply {
-//            isCrossFadeEnabled = true
-//        }
-//
-//        view.background = transition
-//        transition.startTransition(duration)
-//
-//        // Save the new gradient as the "last" one for the next call
-//        lastGradient = newGradient
-//
-//        Log.d("BackgroundTransition", "Transition started. Updated lastGradient.")
-//    }
-
-//    private fun getTimeBasedGradient(): GradientDrawable {
-//        if (zoneId == null || sunriseT == null || sunsetT == null || dawnT == null || duskT == null) {
-//            Log.w("Gradient", "Fallback to default gradient due to missing data")
-//            return defaultGradient()
-//        }
-//
-//        val now = ZonedDateTime.now(zoneId).toLocalTime()
-//        Log.d("TimeDebug", "Current local time: $now")
-//
-//        val (colors, themeIsLight) = when {
-//            now.isAfter(dawnT) && now.isBefore(sunriseT) -> Pair(
-//                intArrayOf(
-//                    Color.parseColor("#FFF176"),
-//                    Color.parseColor("#FFA726")
-//                ),
-//                true // light theme
-//            )
-//
-//            now.isAfter(sunriseT) && now.isBefore(duskT) -> Pair(
-//                intArrayOf(
-//                    Color.parseColor("#AFD2E6"),
-//                    Color.parseColor("#91B9D7")
-//                ),
-//                true // light theme
-//            )
-//
-//            now.isAfter(duskT) && now.isBefore(sunsetT) -> Pair(
-//                intArrayOf(
-//                    Color.parseColor("#FC992C"),
-//                    Color.parseColor("#8A77D9")
-//                ),
-//                false // dark theme
-//            )
-//
-//            else -> Pair(
-//                intArrayOf(
-//                    Color.parseColor("#2562D6"),
-//                    Color.parseColor("#123A85"),
-//                    Color.parseColor("#030A17")
-//                ),
-//                false // dark theme
-//            )
-//        }
-//
-//        isLightTheme = themeIsLight
-//
-////        // Automatically switch app-wide theme based on time
-////        AppCompatDelegate.setDefaultNightMode(
-////            if (isLightTheme) AppCompatDelegate.MODE_NIGHT_NO
-////            else AppCompatDelegate.MODE_NIGHT_YES
-////        )
-//
-//
-//
-//
-//        return GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors).apply {
-//            shape = GradientDrawable.RECTANGLE
-//        }
-//    }
-
-
-//    private fun defaultGradient(): GradientDrawable {
-//        return GradientDrawable(
-//            GradientDrawable.Orientation.TOP_BOTTOM,
-//            intArrayOf(Color.DKGRAY, Color.BLACK)
-//        ).apply {
-//            shape = GradientDrawable.RECTANGLE
-//        }
-//    }
-
-

@@ -9,7 +9,6 @@
     app:cardElevation="0dp"
     android:padding="12dp"
     app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="#FF0000"
     android:id="@+id/weatherCardBackground"
     android:background="@null">
 

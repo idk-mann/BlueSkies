@@ -22,9 +22,6 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONObject
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -58,21 +55,16 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
-import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import java.time.temporal.ChronoUnit
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.google.android.gms.location.LocationServices
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 
 import kotlinx.coroutines.delay
@@ -84,7 +76,7 @@ import com.example.myapplication2.utils.defaultLocations
 import com.example.myapplication2.utils.SunTimesManager
 import com.example.myapplication2.data.repository.CityRepository
 import com.example.myapplication2.model.City
-import com.example.myapplication2.data.local.entity.CityEntity
+
 
 import com.example.myapplication2.data.model.HourlyData
 
@@ -244,8 +236,6 @@ class FirstFragment : Fragment() {
                 "gps" -> {
                     fetchCurrentLocation { lat, lon ->
                         loadSunEvents(lat, lon)
-                        // REMOVE: weatherViewModel.fetchWeather("$lat,$lon", apiKey)
-                        // The observer will handle this automatically
                     }
                 }
                 "none" -> {
@@ -610,6 +600,13 @@ class FirstFragment : Fragment() {
         }
     }
 
+    private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+        when (key) {
+            "detail_level", "hour_range", "time_interval", "date_format", "time_format" -> {
+                checkAndRenderWeather()
+            }
+        }
+    }
 
 
     private fun checkAndRenderWeather() {
@@ -625,9 +622,6 @@ class FirstFragment : Fragment() {
         }
     }
 
-
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1010 && resultCode == Activity.RESULT_OK) {
@@ -641,8 +635,10 @@ class FirstFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("FirstFragment", "Resuming – fragment resumed")
+        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
     }
+
+
 
     fun Activity.showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
@@ -851,9 +847,6 @@ class FirstFragment : Fragment() {
         val chart = chartCard.findViewById<LineChart>(R.id.rainChart)
         val rainChartBackground = chartCard.findViewById<LinearLayout>(R.id.rainChartBackground)
 
-        val currentTime = nowLocationLocalT ?: LocalTime.now()
-
-
         val bgColorRes = SunTimesManager.getCurrentBackgroundColorRes()
         val textColorRes = SunTimesManager.getCurrentTextColorRes()
 
@@ -948,8 +941,6 @@ class FirstFragment : Fragment() {
 
         toggle13h.isChecked = true
         val toggleButtons = listOf(toggle6h, toggle13h)
-
-        val currentTime = nowLocationLocalT ?: LocalTime.now()
 
         // 🎨 Dynamic text & background color
         val bgColorRes = SunTimesManager.getCurrentBackgroundColorRes()
@@ -1255,8 +1246,6 @@ class FirstFragment : Fragment() {
         val dailyContainer = binding.dailySummaryContainer
         dailyContainer.removeAllViews()
 
-        val currentTime = nowLocationLocalT ?: LocalTime.now()
-
         // Determine background and text colors based on time
         val textColorRes = SunTimesManager.getCurrentTextColorRes()
         val bgColorRes = SunTimesManager.getCurrentBackgroundColorRes()
@@ -1383,300 +1372,3 @@ class FirstFragment : Fragment() {
 val Int.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-
-//
-//    private fun createDailySummaryViews(
-//        dailySummariesData: List<DailySummaryData>,
-//        layoutInflater: LayoutInflater
-//    ): List<View> {
-//        val views = mutableListOf<View>()
-//
-//        for ((index, data) in dailySummariesData.withIndex()) {
-//            val dayView = layoutInflater.inflate(R.layout.item_daily_summary, null)
-//
-//            dayView.findViewById<TextView>(R.id.dayLabel).text =
-//                data.day.lowercase().replaceFirstChar { it.uppercase() }
-//            dayView.findViewById<TextView>(R.id.probabilityText).text = "🌧 ${data.avgRain}%"
-//            dayView.findViewById<TextView>(R.id.tempText).text =
-//                if (!data.avgTemp.isNaN()) "${data.avgTemp.toInt()}°C" else "--°C"
-//
-//            val iconRes = WeatherCodeUtils.getIconForWeatherCode(data.iconCode)
-//            dayView.findViewById<ImageView>(R.id.dayIcon)
-//                .setImageResource(if (iconRes != 0) iconRes else R.drawable.unknown)
-//
-//            // Set layout params
-//            val layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-//
-//            val margin6dp = 6.dp
-//            val isFirst = index == 0
-//            val isLast = index == dailySummariesData.lastIndex
-//
-//            layoutParams.setMargins(
-//                if (isFirst) 0 else margin6dp,
-//                margin6dp,
-//                if (isLast) 0 else margin6dp,
-//                margin6dp
-//            )
-//
-//            dayView.layoutParams = layoutParams
-//            views.add(dayView)
-//        }
-//
-//        return views
-//    }
-//
-//
-//
-//    private suspend fun prepareDailySummariesData(
-//        weatherData: List<HourlyData>
-//    ): List<DailySummaryData> = withContext(Dispatchers.Default) {
-//        val summaries = mutableListOf<DailySummaryData>()
-//
-//        // Create local copies to avoid concurrency issues
-//        val localZoneId = zoneId ?: return@withContext summaries
-//        val localSunriseT = sunriseT
-//        val localSunsetT = sunsetT
-//
-//        if (localSunriseT == null || localSunsetT == null) return@withContext summaries
-//
-//        val dailySummary = mutableMapOf<String, MutableList<Triple<Double, Int, Double>>>()
-//
-//        // Process weather data to create daily summaries (data only, no views)
-//        weatherData.forEach { hourData ->
-//            val time = ZonedDateTime.parse(hourData.time, DateTimeFormatter.ISO_DATE_TIME)
-//                .withZoneSameInstant(localZoneId)
-//
-//            val hour = time.hour
-//            if (hour in 6..18) { // Only consider daytime hours
-//                val day = time.dayOfWeek.name.substring(0, 3)
-//                val values = hourData.values
-//                val rain = values.precipitationProbability ?: 0.0
-//                val code = values.weatherCode ?: 0
-//                val temp = values.temperature ?: Double.NaN
-//                dailySummary.getOrPut(day) { mutableListOf() }.add(Triple(rain, code, temp))
-//            }
-//        }
-//
-//        val today = ZonedDateTime.now(localZoneId).dayOfWeek
-//        val orderedDays = (0..6).map { today.plus(it.toLong()).name.substring(0, 3) }
-//        val displayableDays = orderedDays.filter { day -> !dailySummary[day].isNullOrEmpty() }
-//
-//        // Create data objects only (no view inflation)
-//        for (day in displayableDays) {
-//            val readings = dailySummary[day] ?: continue
-//
-//            val avgRain = readings.map { it.first }.average().toInt()
-//            val iconCode = readings.groupingBy { it.second }.eachCount()
-//                .maxByOrNull { it.value }?.key ?: 0
-//            val temps = readings.map { it.third }.filter { !it.isNaN() }
-//            val avgTemp = if (temps.isNotEmpty()) temps.average() else Double.NaN
-//
-//            summaries.add(DailySummaryData(day, avgRain, iconCode, avgTemp))
-//        }
-//
-//        summaries
-//    }
-
-//fun updateTimeFormatInCards(container: ViewGroup, dateFormat: String, timeFormat: String) {
-//    val formatterInput = DateTimeFormatter.ISO_DATE_TIME
-//    val datePattern = if (dateFormat == "MM/dd") "MM/dd" else "dd/MM"
-//    val timePattern = if (timeFormat == "12") "hh:mma" else "HH:mm"
-//    val formatterOutput = DateTimeFormatter.ofPattern("$datePattern $timePattern")
-//
-//    for (i in 0 until container.childCount) {
-//        val view = container.getChildAt(i) ?: continue
-//
-//        // Only update cards with the weather time tag
-//        val utcTime = view.getTag(R.id.tag_weather_time) as? String ?: continue
-//
-//        val deviceTime = ZonedDateTime.parse(utcTime, formatterInput)
-//            .withZoneSameInstant(ZoneId.systemDefault())
-//        val formatted = deviceTime.format(formatterOutput)
-//
-//        view.findViewById<TextView>(R.id.timeText)?.text = formatted
-//    }
-//}
-
-//private fun saveWeatherJsonIfNotRecent(responseBody: String) {
-//    try {
-//        val filename = "weather_${System.currentTimeMillis()}.json"
-//        val file = requireContext().filesDir.resolve(filename)
-//        file.writeText(responseBody)
-//        Log.d("WeatherAPI", "JSON saved to ${file.absolutePath}")
-//    } catch (e: Exception) {
-//        Log.e("WeatherAPI", "Error saving weather JSON", e)
-//    }
-//}
-
-//    private fun updateSpinnerTextColor() {
-//        val locationNames = locations.keys.toList()
-//        val colorResId = getCurrentTextColorRes()
-//        val textColor = ContextCompat.getColor(requireContext(), colorResId)
-//
-//        val adapter = object : ArrayAdapter<String>(
-//            requireContext(),
-//            android.R.layout.simple_spinner_item,
-//            locationNames
-//        ) {
-//            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-//                val view = super.getView(position, convertView, parent)
-//                (view as? TextView)?.setTextColor(textColor)
-//                return view
-//            }
-//
-//            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-//                val view = super.getDropDownView(position, convertView, parent)
-//                (view as? TextView)?.setTextColor(textColor)
-//                return view
-//            }
-//        }
-//
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        binding.locationSpinner.adapter = adapter
-//
-//        // Restore selection
-//        val savedLocation = prefs.getString("selected_location_name", "Farm")
-//        val defaultIndex = locationNames.indexOf(savedLocation)
-//        if (defaultIndex != -1) {
-//            binding.locationSpinner.setSelection(defaultIndex)
-//        }
-//    }
-
-
-//    private fun loadWeatherForLocation(location: String) {
-//        val apiKey = BuildConfig.TOMORROW_API_KEY
-//        Log.d("WeatherDebug", "API Key: $apiKey")
-//
-//        lifecycleScope.launch {
-//            try {
-//                // Retrofit call (suspend function)
-//                val response = RetrofitClient.weatherApi.getForecast(
-//                    location = location,
-//                    apiKey = apiKey
-//                )
-//
-//                // Save data (assuming your API returns something like ForecastResponse)
-//                fullWeatherData = response.timelines.hourly
-//
-//                // Update limited array
-//                updateLimitedArrayFromPrefs()
-//
-//                // Update UI (already on main thread with lifecycleScope, but ok to be explicit)
-//                withContext(Dispatchers.Main) {
-//                    renderWeatherUI()
-//                }
-//            } catch (e: Exception) {
-//                Log.e("WeatherAPI", "Error loading weather", e)
-//
-//                withContext(Dispatchers.Main) {
-//                    activity?.showError("Failed to load weather: ${e.message}")
-//                }
-//            }
-//        }
-//    }
-
-
-//private fun renderDailySummaries(
-//    weatherData: List<HourlyData>,
-//    layoutInflater: LayoutInflater
-//) {
-//    val dailySummary = mutableMapOf<String, MutableList<Triple<Double, Int, Double>>>()
-//    weatherData.forEach { hourData ->
-//        val time = ZonedDateTime.parse(hourData.time, DateTimeFormatter.ISO_DATE_TIME)
-//            .withZoneSameInstant(zoneId)
-//
-//        val hour = time.hour
-//        if (hour in 6..18) {
-//            val day = time.dayOfWeek.name.substring(0, 3)
-//            val values = hourData.values
-//            val rain = values.precipitationProbability ?: 0.0
-//            val code = values.weatherCode ?: 0
-//            val temp = values.temperature ?: Double.NaN
-//            dailySummary.getOrPut(day) { mutableListOf() }.add(Triple(rain, code, temp))
-//        }
-//    }
-//
-//    val dailyContainer = binding.dailySummaryContainer
-//    dailyContainer.removeAllViews()
-//
-//    val today = ZonedDateTime.now(zoneId).dayOfWeek
-//    val orderedDays = (0..6).map { today.plus(it.toLong()).name.substring(0, 3) }
-//    val displayableDays = orderedDays.filter { day -> !dailySummary[day].isNullOrEmpty() }
-//
-//    for ((index, day) in displayableDays.withIndex()) {
-//        val readings = dailySummary[day] ?: continue
-//
-//        val avgRain = readings.map { it.first }.average().toInt()
-//        val iconCode = readings.groupingBy { it.second }.eachCount()
-//            .maxByOrNull { it.value }?.key ?: 0
-//        val temps = readings.map { it.third }.filter { !it.isNaN() }
-//        val avgTemp = if (temps.isNotEmpty()) temps.average() else Double.NaN
-//
-//        val dayView = layoutInflater.inflate(
-//            R.layout.item_daily_summary,
-//            dailyContainer,
-//            false
-//        )
-//
-//        val layoutParams = dayView.layoutParams as? LinearLayout.LayoutParams
-//            ?: LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-//
-//        val margin6dp = 6.dp
-//        val isFirst = index == 0
-//        val isLast = index == displayableDays.lastIndex
-//
-//        layoutParams.setMargins(
-//            if (isFirst) 0 else margin6dp,
-//            margin6dp,
-//            if (isLast) 0 else margin6dp,
-//            margin6dp
-//        )
-//
-//        dayView.layoutParams = layoutParams
-//        dayView.findViewById<TextView>(R.id.dayLabel).text =
-//            day.lowercase().replaceFirstChar { it.uppercase() }
-//        dayView.findViewById<TextView>(R.id.probabilityText).text = "🌧 $avgRain%"
-//        dayView.findViewById<TextView>(R.id.tempText).text =
-//            if (!avgTemp.isNaN()) "${avgTemp.toInt()}°C" else "--°C"
-//
-//        val iconRes = WeatherCodeUtils.getIconForWeatherCode(iconCode)
-//        dayView.findViewById<ImageView>(R.id.dayIcon)
-//            .setImageResource(if (iconRes != 0) iconRes else R.drawable.unknown)
-//
-//        dailyContainer.addView(dayView)
-//    }
-//}
-
-//private var lastHourLimit: Int? = null
-//private var lastDateFormat: String? = null
-//private var lastTimeFormat: String? = null
-//private var lastDetailMode: String? = null
-//private var lastTimeInterval: Int? = null // NEW
-
-//fun logSpecificPrefs(prefs: SharedPreferences) {
-//    val selectedLocation = prefs.getString("selected_location_name", "Not set")
-//    val userLocationsJson = prefs.getString("user_locations_json", "Not set")
-//
-//    Log.d("PrefsCheck", "selected_location_name: $selectedLocation")
-//    Log.d("PrefsCheck", "user_locations_json: $userLocationsJson")
-//}
-
-//    logSpecificPrefs(prefs)
-
-//        weatherViewModel.weatherData.observe(viewLifecycleOwner) { weatherList ->
-//            if (!weatherList.isNullOrEmpty()) {
-//                lifecycleScope.launch {
-//                    renderWeatherUI()  // offloads heavy work
-//                }
-//            }
-//        }
-
-//        weatherViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-//            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-//        }
