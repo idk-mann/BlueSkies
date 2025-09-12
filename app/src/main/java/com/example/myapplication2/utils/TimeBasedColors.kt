@@ -5,6 +5,34 @@ import java.time.LocalTime
 
 object TimeBasedColors {
 
+    fun getCurrentBackgroundColorResInverse(
+        now: LocalTime,
+        dawnT: LocalTime?,
+        sunriseT: LocalTime?,
+        sunsetT: LocalTime?,
+        duskT: LocalTime?
+    ): Int {
+        val dawn = dawnT ?: return R.color.colorSurface
+        val sunrise = sunriseT ?: return R.color.colorSurface
+        val dusk = duskT ?: return R.color.colorSurfaceDark
+        val sunset = sunsetT ?: return R.color.colorSurfaceDark
+
+        return when {
+            // Early morning: dawn to sunrise
+            now.isAfter(dawn) && now.isBefore(sunrise) -> R.color.colorSurface
+
+            // Daytime: sunrise to dusk
+            now.isAfter(sunrise) && now.isBefore(dusk) -> R.color.colorSurface
+
+            // Twilight: dusk to sunset
+            now.isAfter(dusk) && now.isBefore(sunset) -> R.color.colorSurface
+
+            // Nighttime (everything else)
+            else -> R.color.colorSurfaceDark
+        }
+    }
+
+
     fun getCurrentBackgroundColorRes(
         now: LocalTime,
         dawnT: LocalTime?,

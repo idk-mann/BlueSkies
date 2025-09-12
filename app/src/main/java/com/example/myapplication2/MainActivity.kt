@@ -297,6 +297,11 @@ class MainActivity : AppCompatActivity() {
                 lastGradient = newGradient
                 saveLastGradientToPrefs(newGradient)
 
+                val navBarColor = newGradient.colors?.lastOrNull() as? Int
+                navBarColor?.let {
+                    window.navigationBarColor = it
+                }
+
             }
         }
     }
@@ -391,15 +396,17 @@ class MainActivity : AppCompatActivity() {
         return period == TimePeriod.DAWN || period == TimePeriod.DAY
     }
 
+
     private fun getGradientForPeriod(period: TimePeriod): GradientDrawable {
         val colors = when (period) {
             TimePeriod.DAWN -> intArrayOf(
-                Color.parseColor("#FFF176"),
-                Color.parseColor("#FFA726")
+                Color.parseColor("#E8D527"),
+                Color.parseColor("#E39520")
             )
             TimePeriod.DAY -> intArrayOf(
                 Color.parseColor("#AFD2E6"),
                 Color.parseColor("#91B9D7")
+
             )
             TimePeriod.DUSK -> intArrayOf(
                 Color.parseColor("#FC992C"),

@@ -8,7 +8,10 @@ import java.time.*
 import java.time.temporal.ChronoUnit
 import kotlin.math.*
 import android.util.Log
+import androidx.core.content.ContextCompat
 import java.time.format.DateTimeFormatter
+
+import com.example.myapplication2.utils.SunTimesManager
 
 class SunPathView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -71,6 +74,14 @@ class SunPathView @JvmOverloads constructor(
         isAntiAlias = true
     }
 
+    fun updatePaintColors(context: Context) {
+        val colorResId = SunTimesManager.getCurrentTextColorRes()
+        val resolvedColor = ContextCompat.getColor(context, colorResId)
+
+        textPaint.color = resolvedColor
+        linePaint.color = resolvedColor
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val desiredWidth = (totalHours * hourWidth).toInt()
         val desiredHeight = 300
@@ -107,6 +118,8 @@ class SunPathView @JvmOverloads constructor(
         super.onDraw(canvas)
 
         if (sunriseTimes.isEmpty() || sunsetTimes.isEmpty()) return
+
+
 
         val w = width.toFloat()
         val h = height.toFloat()

@@ -22,6 +22,14 @@ object SunTimesManager {
         )
     }
 
+    fun getCurrentTextColorInverseRes(): Int {
+        val fallbackNow = LocalTime.now()
+        return TimeBasedColors.getCurrentBackgroundColorResInverse(
+            now ?: fallbackNow,
+            dawn, sunrise, sunset, dusk
+        )
+    }
+
     fun getCurrentBackgroundColorRes(): Int {
         val fallbackNow = LocalTime.now()
         return TimeBasedColors.getCurrentBackgroundColorRes(

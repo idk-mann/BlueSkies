@@ -708,7 +708,7 @@ class FirstFragment : Fragment() {
                 .equals(newLocalTime.truncatedTo(ChronoUnit.MINUTES))
         ) {
             nowLocationLocalT = newLocalTime
-            applyTimeBasedTextColor()
+//            applyTimeBasedTextColor()
         } else {
             nowLocationLocalT = newLocalTime
         }
@@ -1350,6 +1350,8 @@ class FirstFragment : Fragment() {
     }
 
     private fun animateMainElements() {
+
+        applyTimeBasedTextColor()
         val animatorSet = AnimatorSet()
 
         val fadeInMain = ObjectAnimator.ofFloat(binding.mainTempText, "alpha", 0f, 1f)
